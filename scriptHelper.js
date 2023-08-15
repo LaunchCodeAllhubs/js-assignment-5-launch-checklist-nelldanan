@@ -29,80 +29,75 @@ function validateInput(testInput) {
 }
 
 // Function to handle form submission and update shuttle requirements
-function formSubmission(document, faultyItems, pilotName, coPilotName, fuelLevel, cargoMass) {
-   // Validate input
-   const pilotValidation = validateInput(pilotName);
-   const coPilotValidation = validateInput(coPilotName);
-   const fuelValidation = validateInput(fuelLevel);
-   const cargoValidation = validateInput(cargoMass);
-
-
-   // Update pilot and co-pilot status
-   const pilotStatus = document.getElementById("pilotStatus");
-   pilotStatus.innerHTML = `Pilot ${pilotValidation === "Is a Number" ? ` ${pilotName} is ready for launch` : "Not Ready"}`;
-   const coPilotStatus = document.getElementById("copilotStatus");
-   coPilotStatus.innerHTML = `Co-pilot ${coPilotValidation === "Is a Number" ? ` ${coPilotName} is ready for launch` : "Not Ready"}`;
-
-
-   // Update faulty items list and launch status
-   const listVisibility = faultyItems.style;
+function formSubmission(document, list, pilotName, copilotName, fuelLevel, cargoMass) {
    const launchStatus = document.getElementById("launchStatus");
-   if (pilotValidation !== "Is a Number" || coPilotValidation !== "Is a Number" || fuelValidation !== "Is a Number" || cargoValidation !== "Is a Number") {
-      listVisibility.visibility = "visible";
-      launchStatus.style.color = "#C7254E";
-      launchStatus.textContent = "Shuttle Not Ready for Launch";
-   } else {
-      listVisibility.visibility = "hidden";
-      launchStatus.style.color = "#419F6A";
-      launchStatus.textContent = "Shuttle is Ready for Launch";
-   }
-
-   // Update fuel status
+   const pilotStatus = document.getElementById("pilotStatus");
+   const copilotStatus = document.getElementById("copilotStatus");
    const fuelStatus = document.getElementById("fuelStatus");
-   if (fuelLevel < 10000) {
-      fuelStatus.textContent = "Fuel level too low for launch";
-   } else {
-      fuelStatus.textContent = "Fuel level high enough for launch";
-   }
-
-   // Update cargo status
    const cargoStatus = document.getElementById("cargoStatus");
-   if (cargoMass > 10000) {
-      cargoStatus.textContent = "Cargo mass too heavy for launch";
+
+   if (
+      validateInput(pilotName) === "Empty" ||
+      validateInput(copilotName) === "Empty" ||
+      validateInput(fuelLevel) === "Empty" ||
+      validateInput(cargoMass) === "Empty"
+   ) {
+      window.alert("All fields required, Please fill in field.");
+   } else if (
+      validateInput(fuelLevel) === "Not a number" ||
+      validateInput(cargoMass) === "Not a number" ||
+      validateInput(pilotName) === "Is a number" ||
+      validateInput(copilotName) === "Is a number"
+   ) {
+      window.alert("Invalid Input: Please enter a proper name.");
    } else {
-      cargoStatus.textContent = "Cargo mass low enough for launch";
+      // Update pilot and copilot status using template literals
+      pilotStatus.innerText = `Pilot ${pilotName} is ready`;
+      copilotStatus.innerText = `Co-pilot ${copilotName} is ready`;
+
+      if (cargoMass <= 10000 && fuelLevel >= 10000) {
+         launchStatus.innerText = "Shuttle is ready for launch!";
+         launchStatus.style.color = "rgb(65, 159, 106)";
+         list.style.visibility = "hidden";
+      } else {
+         list.style.visibility = "visible";
+         launchStatus.innerText = "Shuttle is not ready for launch";
+         launchStatus.style.color = "rgb(199, 37, 78)";
+
+         if (fuelLevel > 10000) {
+            fuelStatus.innerText = "Fuel level high enough for launch";
+         } else {
+            fuelStatus.innerText = "Fuel level too low for launch";
+         }
+
+         if (cargoMass < 10000) {
+            cargoStatus.innerText = "Cargo mass low enough for launch";
+         } else {
+            cargoStatus.innerText = "Cargo mass too high for launch";
+         }
+      }
    }
 }
 
-// Function to fetch planetary data
+
+
 async function myFetch() {
    let planetsReturned;
 
-   planetsReturned = await fetch('https://api.example.com/planetaryData').then(function (response) { // Corrected fetch URL
-      if (response.ok) {
-         return response.json();
-      } else {
-         throw new Error('Failed to fetch planets data');
-      }
+   planetsReturned = await fetch(
+      "https://handlers.education.launchcode.org/static/planets.json"
+   ).then(function (response) {
+      return response.json();
    });
-
    return planetsReturned;
 }
 
-// Function to pick a planet randomly
 function pickPlanet(planets) {
-   // Generate a random index within the range of available planets
-   const randomIndex = Math.floor(Math.random() * planets.length);
-
-   // Return the planet at the randomly generated index
-   return planets[randomIndex];
+   return planets[Math.floor(Math.random() * planets.length)];
 }
 
-// Export the functions to make them accessible from other files
-module.exports = {
-   addDestinationInfo,
-   validateInput,
-   formSubmission,
-   myFetch,
-   pickPlanet
-};
+module.exports.addDestinationInfo = addDestinationInfo;
+module.exports.validateInput = validateInput;
+module.exports.pickPlanet = pickPlanet;
+module.exports.formSubmission = formSubmission;
+module.exports.myFetch = myFetch;
