@@ -1,6 +1,5 @@
 // Import the 'isomorphic-fetch' library
 require('isomorphic-fetch');
-//const fetch = require('node-fetch');
 
 // Function to add destination information to the mission target
 function addDestinationInfo(document, name, diameter, star, distance, moons, imageUrl) {
