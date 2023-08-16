@@ -1,4 +1,4 @@
-// Wait for the DOM to be fully loaded
+// Wait for the DOM to be fully loaded//
 window.addEventListener("load", function () {
 
    // Fetch the list of planets
