@@ -1,5 +1,6 @@
 // Import the 'isomorphic-fetch' library
 require('isomorphic-fetch');
+//const fetch = require('node-fetch');
 
 // Function to add destination information to the mission target
 function addDestinationInfo(document, name, diameter, star, distance, moons, imageUrl) {
@@ -44,16 +45,16 @@ function formSubmission(document, list, pilotName, copilotName, fuelLevel, cargo
    ) {
       window.alert("All fields required, Please fill in field.");
    } else if (
-      validateInput(fuelLevel) === "Not a number" ||
-      validateInput(cargoMass) === "Not a number" ||
-      validateInput(pilotName) === "Is a number" ||
-      validateInput(copilotName) === "Is a number"
+      validateInput(fuelLevel) === "Not a Number" ||
+      validateInput(cargoMass) === "Not a Number" ||
+      validateInput(pilotName) === "Is a Number" ||
+      validateInput(copilotName) === "Is a Number"
    ) {
       window.alert("Invalid Input: Please enter a proper name.");
    } else {
       // Update pilot and copilot status using template literals
-      pilotStatus.innerText = `Pilot ${pilotName} is ready`;
-      copilotStatus.innerText = `Co-pilot ${copilotName} is ready`;
+      pilotStatus.innerText = `Pilot ${pilotName} is ready for launch`;
+      copilotStatus.innerText = `Co-pilot ${copilotName} is ready for launch`;
 
       if (cargoMass <= 10000 && fuelLevel >= 10000) {
          launchStatus.innerText = "Shuttle is ready for launch!";
@@ -61,7 +62,7 @@ function formSubmission(document, list, pilotName, copilotName, fuelLevel, cargo
          list.style.visibility = "hidden";
       } else {
          list.style.visibility = "visible";
-         launchStatus.innerText = "Shuttle is not ready for launch";
+         launchStatus.innerText = "Shuttle is Not Ready for launch";
          launchStatus.style.color = "rgb(199, 37, 78)";
 
          if (fuelLevel > 10000) {
@@ -78,7 +79,6 @@ function formSubmission(document, list, pilotName, copilotName, fuelLevel, cargo
       }
    }
 }
-
 
 
 async function myFetch() {
