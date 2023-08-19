@@ -1,16 +1,39 @@
-// Write your JavaScript code here!
+// Wait for the DOM to be fully loaded//
+window.addEventListener("load", function () {
 
-window.addEventListener("load", function() {
+   // Fetch the list of planets
+   myFetch().then(function (result) {
+      // Store the fetched list of planets
+      const listedPlanets = result;
 
-   let listedPlanets;
-   // Set listedPlanetsResponse equal to the value returned by calling myFetch()
-   let listedPlanetsResponse;
-   listedPlanetsResponse.then(function (result) {
-       listedPlanets = result;
-       console.log(listedPlanets);
-   }).then(function () {
-       console.log(listedPlanets);
-       // Below this comment call the appropriate helper functions to pick a planet fom the list of planets and add that information to your destination.
-   })
-   
+      // Select a random planet
+      const selectedPlanet = pickPlanet(listedPlanets);
+
+      // Add destination information to the mission target
+      addDestinationInfo(
+         document,
+         selectedPlanet.name,
+         selectedPlanet.diameter,
+         selectedPlanet.star,
+         selectedPlanet.distance,
+         selectedPlanet.moons,
+         selectedPlanet.image
+      );
+   });
+
+   // Add an event listener for the form submission
+   const form = document.querySelector("form");
+   form.addEventListener("submit", function (event) {
+      event.preventDefault(); // Prevent form submission and page reload
+
+      // Get user input
+      const pilotName = document.querySelector('input[name="pilotName"]').value;
+      const coPilotName = document.querySelector('input[name="copilotName"]').value;
+      const fuelLevel = document.querySelector('input[name="fuelLevel"]').value;
+      const cargoMass = document.querySelector('input[name="cargoMass"]').value;
+
+      // Call the formSubmission function to validate and update shuttle requirements
+      const faultyItems = document.getElementById("faultyItems");
+      formSubmission(document, faultyItems, pilotName, coPilotName, fuelLevel, cargoMass);
+   });
 });
